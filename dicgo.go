@@ -19,7 +19,7 @@ type Container interface {
 	// Service returns service, or panics if not defined
 	Service(id string) interface{}
 	// Raw returns raw service factory
-	Raw(id string) (Factory, bool)
+	Raw(id string) (func(c Container) interface{}, bool)
 	// Has returns if container has service definition
 	Has(id string) bool
 	// Del deletes service from the container
@@ -95,7 +95,7 @@ func (c *container) Service(id string) interface{} {
 	return s
 }
 
-func (c *container) Raw(id string) (Factory, bool) {
+func (c *container) Raw(id string) (func(c Container) interface{}, bool) {
 	def, ok := c.defs[id]
 	if !ok {
 		return nil, ok
